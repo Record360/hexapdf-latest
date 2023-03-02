@@ -49,8 +49,8 @@ module HexaPDF
         # Creates and configures a new Geom2D drawing support object.
         #
         # See #configure for the allowed keyword arguments.
-        def self.configure(**kwargs)
-          new.configure(kwargs)
+        def self.configure(...)
+          new.configure(...)
         end
 
         # The Geom2D object that should be drawn

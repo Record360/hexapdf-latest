@@ -27,7 +27,7 @@ describe HexaPDF::Type::Trailer do
 
   it "returns the info object, creating it if needed" do
     doc = Minitest::Mock.new
-    doc.expect(:add, :val, [{}, type: :XXInfo])
+    doc.expect(:add, :val, [{}], type: :XXInfo)
     trailer = HexaPDF::Type::Trailer.new({}, document: doc)
     assert_equal(:val, trailer.info)
     doc.verify

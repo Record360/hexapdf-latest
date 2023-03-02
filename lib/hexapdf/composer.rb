@@ -93,7 +93,7 @@ module HexaPDF
     #     ...
     #   end
     def self.create(output, **options, &block)
-      new(options, &block).write(output)
+      new(**options, &block).write(output)
     end
 
     # The PDF document that is created.
@@ -188,7 +188,7 @@ module HexaPDF
     #
     # See HexaPDF::Layout::TextBox for details.
     def text(str, width: 0, height: 0, style: nil, **options)
-      style = update_style(style, options)
+      style = update_style(style, **options)
       draw_box(Layout::TextBox.new([Layout::TextFragment.create(str, style)],
                                    width: width, height: height, style: style))
     end
@@ -219,14 +219,14 @@ module HexaPDF
     #   composer.formatted_text(["Some ", {link: "https://example.com", text: "Example"}])
     #   composer.formatted_text(["Some ", {text: "string", style: my_style}])
     def formatted_text(data, width: 0, height: 0, style: nil, **options)
-      style = update_style(style, options)
+      style = update_style(style, **options)
       data.map! do |hash|
         if hash.kind_of?(String)
           Layout::TextFragment.create(hash, style)
         else
           link = hash.delete(:link)
           text = hash.delete(:text) || link || ""
-          used_style = update_style(hash.delete(:style), options) || style
+          used_style = update_style(hash.delete(:style), **options) || style
           if link || !hash.empty?
             used_style = used_style.dup
             hash.each {|key, value| used_style.send(key, value) }
@@ -242,7 +242,7 @@ module HexaPDF
     #
     # See #text for details on +width+, +height+, +style+ and +options+.
     def image(file, width: 0, height: 0, style: nil, **options)
-      style = update_style(style, options)
+      style = update_style(style, **options)
       image = document.images.add(file)
       draw_box(Layout::ImageBox.new(image, width: width, height: height, style: style))
     end
@@ -293,9 +293,9 @@ module HexaPDF
 
     # Updates the Layout::Style object +style+ if one is provided, or the base style, with the style
     # options to make it work in all cases.
-    def update_style(style, options = {})
+    def update_style(style, **options)
       style ||= base_style
-      style = style.dup.update(options) unless options.empty?
+      style = style.dup.update(**options) unless options.empty?
       style.font(base_style.font) unless style.font?
       style.font(@document.fonts.add(style.font)) unless style.font.respond_to?(:dict)
       style

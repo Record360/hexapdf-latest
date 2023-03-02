@@ -53,8 +53,8 @@ module HexaPDF
         # Creates and configures a new endpoint arc object.
         #
         # See #configure for the allowed keyword arguments.
-        def self.configure(**kwargs)
-          new.configure(kwargs)
+        def self.configure(...)
+          new.configure(...)
         end
 
         # x-coordinate of endpoint
@@ -133,7 +133,7 @@ module HexaPDF
             canvas.line_to(@x, @y)
           else
             values = compute_arc_values(x1, y1)
-            arc = canvas.graphic_object(:arc, values)
+            arc = canvas.graphic_object(:arc, **values)
             arc.draw(canvas, move_to_start: false)
           end
         end

@@ -61,8 +61,8 @@ module HexaPDF
         # Creates and configures a new solid arc object.
         #
         # See #configure for the allowed keyword arguments.
-        def self.configure(**kwargs)
-          new.configure(kwargs)
+        def self.configure(...)
+          new.configure(...)
         end
 
         # x-coordinate of center point

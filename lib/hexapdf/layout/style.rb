@@ -523,7 +523,7 @@ module HexaPDF
       # Example:
       #   Style.new(font_size: 15, align: :center, valign: center)
       def initialize(**properties)
-        update(properties)
+        update(**properties)
         @scaled_item_widths = {}
       end
 
@@ -891,18 +891,19 @@ module HexaPDF
         [:stroke_join_style, :miter],
         [:stroke_miter_limit, 10.0],
         [:stroke_dash_pattern, "Content::LineDashPattern.new",
-         "Content::LineDashPattern.normalize(value, phase)", ", phase = 0"],
+          "Content::LineDashPattern.normalize(value, phase)", ", phase = 0"],
         [:align, :left],
         [:valign, :top],
         [:text_indent, 0],
         [:line_spacing, "LineSpacing.new(type: :single)",
-         "LineSpacing.new(value.kind_of?(Symbol) ? {type: value, value: extra_arg} : value)",
-         ", extra_arg = nil"],
+          "LineSpacing.new(**(value.kind_of?(Symbol) || value.kind_of?(Numeric) ? " \
+                     "{type: value, value: extra_arg} : value))",
+          ", extra_arg = nil"],
         [:last_line_gap, false],
         [:background_color, nil],
         [:padding, "Quad.new(0)", "Quad.new(value)"],
         [:margin, "Quad.new(0)", "Quad.new(value)"],
-        [:border, "Border.new", "Border.new(value)"],
+        [:border, "Border.new", "Border.new(**value)"],
         [:overlays, "Layers.new", "Layers.new(value)"],
         [:underlays, "Layers.new", "Layers.new(value)"],
         [:position, :default],

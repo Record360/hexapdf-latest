@@ -49,8 +49,8 @@ module HexaPDF
       # are passed to Box::create.
       #
       # See ::new for the +valign+ argument.
-      def self.create(valign: :baseline, **args, &block)
-        new(Box.create(**args, &block), valign: valign)
+      def self.create(valign: :baseline, **kwargs, &block)
+        new(Box.create(**kwargs, &block), valign: valign)
       end
 
       # The vertical alignment of the box.

@@ -66,7 +66,7 @@ module HexaPDF
     #
     # A graphic object itself has to respond to two methods:
     #
-    # #configure(**kwargs)::
+    # #configure(...)::
     #     This method is used for re-configuring the graphic object and it should return the
     #     graphic object itself, not a new object.
     #

@@ -34,7 +34,7 @@ describe HexaPDF::DictionaryFields do
     describe "convert" do
       it "returns the converted object, using the first usable converter" do
         doc = Minitest::Mock.new
-        doc.expect(:wrap, :data, [Hash, Hash])
+        doc.expect(:wrap, :data, [Hash], type: Integer)
         @field.convert({}, doc)
         doc.verify
 
@@ -64,20 +64,20 @@ describe HexaPDF::DictionaryFields do
     end
 
     it "allows conversion from a hash" do
-      @doc.expect(:wrap, :data, [Hash, Hash])
+      @doc.expect(:wrap, :data, [Hash], type: @field.type.first)
       @field.convert({Test: :value}, @doc)
       @doc.verify
     end
 
     it "allows conversion from a Dictionary" do
-      @doc.expect(:wrap, :data, [HexaPDF::Dictionary, Hash])
-      @field.convert(HexaPDF::Dictionary.new(Test: :value), @doc)
+      @doc.expect(:wrap, :data, [HexaPDF::Dictionary], type: @field.type.first)
+      @field.convert(HexaPDF::Dictionary.new({Test: :value}), @doc)
       @doc.verify
     end
 
     it "allows conversion from an HexaPDF::Dictionary to a Stream if stream data is set" do
       @field = self.class::Field.new(HexaPDF::Stream)
-      @doc.expect(:wrap, :data, [HexaPDF::Dictionary, Hash])
+      @doc.expect(:wrap, :data, [HexaPDF::Dictionary], type: @field.type.first)
       data = HexaPDF::PDFData.new({}, 0, 0, "")
       @field.convert(HexaPDF::Dictionary.new(data), @doc)
       @doc.verify
@@ -86,7 +86,7 @@ describe HexaPDF::DictionaryFields do
     it "doesn't allow conversion to a Stream subclass from Hash or Dictionary" do
       @field = self.class::Field.new(HexaPDF::Stream)
       refute(@field.convert({}, @doc))
-      refute(@field.convert(HexaPDF::Dictionary.new(Test: :value), @doc))
+      refute(@field.convert(HexaPDF::Dictionary.new({Test: :value}), @doc))
     end
 
     it "doesn't allow conversion from nil" do
@@ -174,14 +174,14 @@ describe HexaPDF::DictionaryFields do
 
     it "allows conversion from a string" do
       @doc = Minitest::Mock.new
-      @doc.expect(:wrap, :data, [{F: 'test'}, {type: HexaPDF::Type::FileSpecification}])
+      @doc.expect(:wrap, :data, [{F: 'test'}], type: HexaPDF::Type::FileSpecification)
       @field.convert('test', @doc)
       @doc.verify
     end
 
     it "allows conversion from a hash/dictionary" do
       @doc = Minitest::Mock.new
-      @doc.expect(:wrap, :data, [{F: 'test'}, {type: HexaPDF::Type::FileSpecification}])
+      @doc.expect(:wrap, :data, [{F: 'test'}], type: HexaPDF::Type::FileSpecification)
       @field.convert({F: 'test'}, @doc)
       @doc.verify
     end
@@ -198,7 +198,7 @@ describe HexaPDF::DictionaryFields do
 
     it "allows conversion to a Rectangle from an Array" do
       doc = Minitest::Mock.new
-      doc.expect(:wrap, :data, [[0, 1, 2, 3], type: HexaPDF::Rectangle])
+      doc.expect(:wrap, :data, [[0, 1, 2, 3]], type: HexaPDF::Rectangle)
       @field.convert([0, 1, 2, 3], doc)
       doc.verify
     end
